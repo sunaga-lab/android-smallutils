@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'maven-publish'
 }
+
+group = 'com.github.sunaga-lab'
 
 android {
     compileSdk 31
@@ -43,3 +47,17 @@ dependencies {
 
 
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.sunaga-lab'
+                artifactId = 'android-smallutils'
+                version = '1.0'
+            }
+        }
+    }
+}
+
