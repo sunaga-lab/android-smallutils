@@ -6,6 +6,8 @@ object DateUtil {
 
     fun addDays(fromDate: Date, days: Int): Date = Date(fromDate.time + days*1000*60*60*24)
     fun addHours(fromDate: Date, hours: Int): Date = Date(fromDate.time + hours*1000*60*60)
+    fun addMinutes(fromDate: Date, minutes: Int): Date = Date(fromDate.time + minutes*1000*60)
+    fun addSeconds(fromDate: Date, seconds: Int): Date = Date(fromDate.time + seconds*1000)
 
 
     fun calcStartOfDay(date: Date): Date {
