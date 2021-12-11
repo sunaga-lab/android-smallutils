@@ -1,4 +1,8 @@
 
+// !!!
+// !!!  This config is not for library module, for app
+// !!!
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -13,7 +17,7 @@ android {
         minSdk 19
         targetSdk 31
         versionCode 1
-        versionName "0.5"
+        versionName "0.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
