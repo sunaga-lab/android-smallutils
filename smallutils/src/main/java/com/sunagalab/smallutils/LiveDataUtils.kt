@@ -14,7 +14,7 @@ object LiveDataTools {
         var p2Val: T2? = null
         fun update() {
             if(p1Val != null && p2Val != null) {
-                result.postValue(composer(p1Val!!, p2Val!!))
+                result.value = composer(p1Val!!, p2Val!!)
             }
         }
         result.addSource(p1) {
@@ -35,7 +35,7 @@ object LiveDataTools {
         var p3Val: T3? = null
         fun update() {
             if(p1Val != null && p2Val != null && p3Val != null) {
-                result.postValue(composer(p1Val!!, p2Val!!, p3Val!!))
+                result.value = composer(p1Val!!, p2Val!!, p3Val!!)
             }
         }
         result.addSource(p1) {
@@ -61,7 +61,7 @@ object LiveDataTools {
         var p4Val: T4? = null
         fun update() {
             if(p1Val != null && p2Val != null && p3Val != null && p4Val != null) {
-                result.postValue(composer(p1Val!!, p2Val!!, p3Val!!, p4Val!!))
+                result.value = composer(p1Val!!, p2Val!!, p3Val!!, p4Val!!)
             }
         }
         result.addSource(p1) {
@@ -112,7 +112,7 @@ object LiveDataTools {
             result.addSource(liveData) {
                 stockValue.value = it
                 if(p1Val.isSet && p2Val.isSet) {
-                    result.postValue(composer(p1Val.value, p2Val.value))
+                    result.value = composer(p1Val.value, p2Val.value)
                 }
             }
         }
@@ -130,7 +130,7 @@ object LiveDataTools {
             result.addSource(liveData) {
                 stockValue.value = it
                 if(p1Val.isSet && p2Val.isSet && p3Val.isSet) {
-                    result.postValue(composer(p1Val.value, p2Val.value, p3Val.value))
+                    result.value = composer(p1Val.value, p2Val.value, p3Val.value)
                 }
             }
         }
