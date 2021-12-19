@@ -140,6 +140,53 @@ object LiveDataTools {
         return result
     }
 
+    fun <T1, T2, T3, T4, TResult> composeNullable(p1: LiveData<T1>, p2: LiveData<T2>, p3: LiveData<T3>, p4: LiveData<T4>, composer: (T1, T2, T3, T4)->TResult): LiveData<TResult> {
+        val result = MediatorLiveData<TResult>()
+        val p1Val = Unsettable<T1>()
+        val p2Val = Unsettable<T2>()
+        val p3Val = Unsettable<T3>()
+        val p4Val = Unsettable<T4>()
+        fun<T> addSrc(liveData: LiveData<T>, stockValue: Unsettable<T>) {
+            result.addSource(liveData) {
+                stockValue.value = it
+                if(p1Val.isSet && p2Val.isSet && p3Val.isSet && p4Val.isSet) {
+                    result.value = composer(p1Val.value, p2Val.value, p3Val.value, p4Val.value)
+                }
+            }
+        }
+        addSrc(p1, p1Val)
+        addSrc(p2, p2Val)
+        addSrc(p3, p3Val)
+        addSrc(p4, p4Val)
+        return result
+    }
+
+    fun <TItem, TResult> composeList(items: List<LiveData<TItem>>, composer: (Iterable<TItem>) -> TResult): LiveData<TResult> {
+        val result = MediatorLiveData<TResult>()
+
+        val unsettableList = (0..items.count()).map {
+            Unsettable<TItem>()
+        }.toList()
+
+        items.forEachIndexed { index, liveData ->
+            result.addSource(liveData) {
+                unsettableList[index].value = it
+
+                if (unsettableList.all { it.isSet }) {
+                    result.value = composer(unsettableList.map { it.value })
+                }
+            }
+        }
+        return result
+    }
+
+    fun or(a: LiveData<Boolean>, b: LiveData<Boolean>) = composeNullable(a, b) { va, vb -> va || vb }
+    fun or(a: LiveData<Boolean>, b: LiveData<Boolean>, c: LiveData<Boolean>) = composeNullable(a, b, c) { va, vb, vc -> va || vb || vc}
+    fun or(a: LiveData<Boolean>, b: LiveData<Boolean>, c: LiveData<Boolean>, d: LiveData<Boolean>) = composeNullable(a, b, c, d) { va, vb, vc, vd -> va || vb || vc || vd}
+    fun and(a: LiveData<Boolean>, b: LiveData<Boolean>) = composeNullable(a, b) { va, vb -> va && vb }
+    fun and(a: LiveData<Boolean>, b: LiveData<Boolean>, c: LiveData<Boolean>) = composeNullable(a, b, c) { va, vb, vc -> va && vb && vc}
+    fun and(a: LiveData<Boolean>, b: LiveData<Boolean>, c: LiveData<Boolean>, d: LiveData<Boolean>) = composeNullable(a, b, c, d) { va, vb, vc, vd -> va && vb && vc && vd}
+
 }
 
 
